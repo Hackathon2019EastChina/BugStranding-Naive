@@ -1,10 +1,11 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
-import { Row, Col, AutoComplete } from 'antd';
+import {Skeleton, Row, Col, AutoComplete } from 'antd';
 import { connect } from 'react-redux';
 import {setKeyword} from '../../../redux/actions/action'
 import {withRouter} from "react-router-dom";
 import ErrorPage from '../../../components/ErrorPage'
+import UCard from '../list/uCard'
 
 var keyword=null
 const mapStateToProps = state => ({
@@ -18,8 +19,7 @@ export class Search extends BaseComponent {
         }
         this.state={
             loading:true,
-            data1:[],
-            data2:[]
+            data:[]
         }
     }
 
@@ -29,44 +29,40 @@ export class Search extends BaseComponent {
 
     getResult=(keyword)=>{
         var successAction = (result) => {
-            const data1=[]
-            const data2=[]
-            if(result.content!=null&&result.content.length>0){
-                for(var i=0;i<result.content.length;i++){
-                    if(i%2==0)
-                        data1.push(result.content[i])
-                    else
-                        data2.push(result.content[i])
-                }
-                this.state.data1=data1
-                this.state.data2=data2
-            }
-            this.setState({loading:false})   
+            this.setState({loading:false,data:result.question})   
         }
-        this.get("/movie/search?keyword="+keyword,successAction)
+        this.get("/question/search?keywords="+keyword,successAction)
     }
 
     renderItem=(item)=>{
         return(
-            {/* <FilmCard item={item}/> */}
+            <UCard data={item}/>
         );
     }
     
     renderList=()=>{
-        if(this.state.data1.length>0)
+        if(this.state.data.length>0)
             return(
-                <Row  type='flex' justify='space-around'>
-                    <Col xs={11} sm={10}>
-                        {this.state.data1.map(this.renderItem)}
+                <Row  type='flex' justify='center' style={{width:"100%"}}>
+                    
+                    <Col lg={2} xs={1}/>
+                    <Col lg={20} xs={22}>
+                        {this.state.data.map(this.renderItem)}
                     </Col>
-                    <Col xs={11} sm={10}>
-                        {this.state.data2.map(this.renderItem)}
+                    <Col lg={2} xs={1}/>
+                </Row>
+            )
+        if(this.state.loading)
+            return(
+                <Row  type='flex' justify='center' style={{width:"100%"}}>
+                    <Col span={18}>
+                        <Skeleton active/>
                     </Col>
                 </Row>
             )
         else
             return(
-                <ErrorPage text={"未找到相应结果"}/>
+                <ErrorPage text={"No result found"}/>
             )
     }
 
@@ -79,14 +75,14 @@ export class Search extends BaseComponent {
         if(!keyword)
             return (
                 <Row style={styles.container} >
-                    <ErrorPage text={"访问失败，请遵照网站指引进行浏览"}/>
+                    <ErrorPage text={"Access Failed. Please follow the instruction of the site."}/>
                 </Row>
             );
         else
             return (
                 <Row style={styles.container} >
                     <Row style={styles.rows} id="listStart" type='flex' justify='center'>
-                        <Col xs={22} sm={20} lg={18}>
+                        <Col xs={22} sm={20} lg={17}>
                             <h3 style={styles.titles}>Search Result</h3>
                         </Col>
                     </Row>
@@ -107,10 +103,11 @@ const styles = {
     titles:{
         marginLeft:20,
         marginTop:10,
-        fontSize:20,
-        fontFamily:"黑体"
+        fontSize:22,
+        fontFamily:"Georgia"
     },
     rows:{
         marginBottom:30
     }
 }
+

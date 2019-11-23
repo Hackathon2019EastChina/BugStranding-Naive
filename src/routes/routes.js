@@ -42,7 +42,7 @@ const mainRoutes = [//默认路由（其实是第二层，第一层在隔壁inde
             },
             {
                 path: "/detail",
-                icon: 'search',
+                icon: 'detail',
                 component: wrap(Pages.Audience.Detail)
             },
         ]

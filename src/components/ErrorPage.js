@@ -40,7 +40,7 @@ const styles = {
         textAlign:'start',
         fontSize:"24px",
         color:"black",
-        fontFamily:"黑体",
+        fontFamily:"Georgia",
         margin:10
     },
 }

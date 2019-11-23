@@ -44,15 +44,15 @@ class UCard extends BaseComponent {
         // )
 
         return (
-
-            <div>
-
-            <Card title={<Title level={3}>{<a onClick={()=>{this.props.history.push({
+            <Card 
+                style={{width:"100%",marginBottom:20}}
+                title={<Title level={3}>
+                {<a onClick={()=>{this.props.history.push({
                 pathname:"/user/detail",
                 state:{qid,user,completed:true}
-            })}}>{title}</a>}</Title>}>
+                })}}>{title}</a>}</Title>}>
 
-         <Col span={24}>
+                <Col span={24}>
                      <Row type="flex" justify="start" align="middle">
                          <User user={user}/>
                      </Row>
@@ -63,13 +63,7 @@ class UCard extends BaseComponent {
                  <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
                      <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
                  </Row>
-
-
-
             </Card>
-        <Paragraph>{"\n"}</Paragraph>
-
-            </div>
 
 
 

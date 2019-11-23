@@ -4,6 +4,7 @@ import BaseComponent from './BaseComponent'
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import {setKeyword} from '../redux/actions/action'
+import { timeout } from "q";
 
 const mapStateToProps = state => ({
     keyword: state.keywordReducer.keyword,
@@ -22,15 +23,30 @@ class SearchBar extends BaseComponent {
     search=()=>{
         const keyword=this.state.name
         this.props.dispatch(setKeyword(keyword))
-        this.props.history.push({pathname:"/user/search",state:{keyword}})
+        if(!keyword||keyword==""){
+            this.pushNotification("danger","Keyword shouldn't be empty.")
+            return
+        }
+        this.props.history.push({pathname:"/user/",state:{keyword}})
+        this.timeout(1).then(()=>
+        
+        this.props.history.push({pathname:"/user/search",state:{keyword}}))
+        
     }
 
     fetchAutoComplete = (value) => {
         var successAction = (result) => {
-            this.setState({dataSource: result.content});
-            console.log("success")
+            const group=result.recommend
+            if(group&&group.suggestionGroups.length){
+                const jArr=group.suggestionGroups[0].searchSuggestions
+                var suggestions=[]
+                for(var i=0;i<jArr.length;i++){
+                    suggestions.push(jArr[i].displayText)
+                }
+                this.setState({dataSource:suggestions });
+            }
         }
-        this.post('/movie/incomplete?keyword='+value,null, successAction)
+        this.get('/question/searchRecommend?keywords='+value,successAction)
     }
 
     autoOnChange = (value) => {
@@ -40,9 +56,9 @@ class SearchBar extends BaseComponent {
         if(this.timer){
             clearTimeout(this.timer);
         }
-        this.timer = setTimeout((
+        this.timeout(500).then(()=>{
             this.fetchAutoComplete(value)
-        ),500);
+        });
     }
 
     renderSearch=()=>{
@@ -76,4 +92,4 @@ class SearchBar extends BaseComponent {
     }
 }
 
-export default connect(mapStateToProps)(withRouter(SearchBar));
+export default withRouter(connect(mapStateToProps)(SearchBar));

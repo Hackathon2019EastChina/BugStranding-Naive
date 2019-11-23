@@ -9,7 +9,6 @@ const mapStateToProps = state => ({
     keyword: state.keywordReducer.keyword,
 })
 class QuestionBar extends BaseComponent {
-    
     constructor(props){
         super(props);
         this.state={

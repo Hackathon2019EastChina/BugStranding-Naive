@@ -1,6 +1,6 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
-import { Row, Col, AutoComplete,Tabs } from 'antd';
+import {Divider, Row, Col, AutoComplete,Tabs } from 'antd';
 import CCard from './cCard'
 import UCard from './uCard'
 const { TabPane } = Tabs;
@@ -33,9 +33,9 @@ export class List extends BaseComponent {
     renderUCards=()=>{
         if(this.state.data!=1)
             return(
-                <TabPane tab="Under Going" key="1">
+                <Row style={{fontSize:20,width:"100%"}} type="flex" justify="center">
                     {this.state.data.map(this.renderUCard)}
-                </TabPane>
+                </Row>
             )
         return null
     }
@@ -49,34 +49,33 @@ export class List extends BaseComponent {
             return null
     }
 
-    renderCCards=()=>{
-        if(this.state.data!=1)
-            return(
-                <TabPane tab="Completed" key="2">
-                    {this.state.data.map(this.renderCCard)}
-                </TabPane>
-            )
-        return null
-    }
+    // renderCCards=()=>{
+    //     if(this.state.data!=1)
+    //         return(
+    //             <TabPane tab="Completed" key="2">
+    //                 {this.state.data.map(this.renderCCard)}
+    //             </TabPane>
+    //         )
+    //     return null
+    // }
 
-    renderCCard=(item)=>{
-        if(item.status==2)
-            return(
-                <CCard data={item}/>
-            )
-        else
-            return null
-    }
+    // renderCCard=(item)=>{
+    //     if(item.status==2)
+    //         return(
+    //             <CCard data={item}/>
+    //         )
+    //     else
+    //         return null
+    // }
 
     render(){
         return (
             <Row style={styles.container} >
                 <Col lg={6} xs={1}/>
                 <Col lg={12} xs={22}>
-                    <Tabs defaultActiveKey="1" >
-                        {this.renderUCards()}
-                        {this.renderCCards()}
-                    </Tabs>        
+                    <Row style={{fontWeight:"bold",fontSize:20}}>Question List</Row>
+                    <Divider style={{marginTop:5}}/>
+                    {this.renderUCards()}
                 </Col>
                 <Col lg={6} xs={1}/>
             </Row>
