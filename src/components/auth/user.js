@@ -2,7 +2,7 @@ import React,{Component} from "react";
 import {Icon,Row} from 'antd';
 import {withRouter } from "react-router-dom";
 import {connect} from "react-redux"
-import BaseComponent from '../../../components/BaseComponent'
+import BaseComponent from '../BaseComponent'
 import { Grid, Avatar, Typography} from '@material-ui/core';
 
 

@@ -1,7 +1,7 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import { Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
-import User from './user'
+import User from '../../../components/auth/user'
 import copy from 'copy-to-clipboard';
 import Answer from './answer'
 

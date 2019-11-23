@@ -1,112 +1,51 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
-import {Card, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions } from 'antd';
+import {Card, Row, Col, Typography,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
+import User from '../../../components/auth/user'
+const { TextArea } = Input;
+const { Title,Paragraph } = Typography;
 const test={
-        "answer":[{
-            "desp":"222",
-            "dockerId":"asdas",
-            "username":"asdas",
-            "diff":""
-        },{
-            "desp":"333",
-            "dockerId":"as",
-            "username":"asd",
-            "diff":""
-        }],
-        "desp":"A Large Prob",
-        "dockerId":"asdasasd",
-        "qId":"sadasdasfd",
-        "title":"Question 1",
-        "username":"Questioner"
 }
 
 var columns = [];
-export default class CCard extends BaseComponent {
-    
-    renderAnswer=(data)=>{
+export default class UCard extends BaseComponent {
+
+    constructor(props){
+        super(props);
+        this.state={
+            desp:1,
+        }
+    };
+
+    componentWillMount(){
+    }
+
+    renderTitle=(title,desp,user,time)=>{
         return(
-            <Table pagination={false} columns={columns} dataSource={data}  />
+            <Row type="flex" justify="start" align="middle">
+                <Col span={24}>
+                    <Title level={2}>{title}</Title>
+                </Col>
+                <Col span={24}>
+                    <Row type="flex" justify="start" align="middle">
+                        <User user={user}/>
+                    </Row>
+                </Col>
+                <Col span={24}>
+                    <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
+                </Col>
+                <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
+                    <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
+                </Row>
+            </Row>
         )
     }
 
-    handleCopy=(dockerId)=>{
-        if(copy(dockerId+""))
-            this.pushNotification("success","Docker-"+dockerId+" has been copied. Please open it in VS Code")
-        else
-            this.pushNotification("danger","Copy Failed")
-    }
-
-    componentWillMount(){
-        columns=[{
-            title: 'Solution Brief',
-            dataIndex: 'desp',
-          },
-          {
-            title: 'Answerer',
-            dataIndex: 'username',
-          },
-          {
-            title: 'Docker Id',
-            dataIndex: 'dockerId',
-          },
-          {
-            title: 'Action',
-            dataIndex: 'dockerId',
-            render: dockerId => (
-              <Row type="flex" justify='start' >
-                  <Button
-                  style={styles.btn}
-                  size="large"
-                  type="link"
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="copy"/></Button>  
-                  <Button
-                  type="link"
-                  size="large"
-                  style={styles.btn}
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="check"/></Button> 
-                  {/* 采纳和删除docker */}
-                  <Button
-                  type="link"
-                  size="large"
-                  style={styles.btn}
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="stop"/></Button>  
-              </Row>
-            ),
-          }]
-    }
-
     render(){
-        const {desp,dockerId,title,username}=test
-        const {Item}=Descriptions
+        const {title,desp,user,time}=this.props.data
         return (
-            <Card title={"Title: "+title} extra={<a href="#">More</a>} style={styles.container}>
-                <Descriptions  bordered>
-                <Item span={3} label="Description">
-                    {desp}
-                </Item>
-                <Item label="Source Docker" >
-                    <Row style={{height:30}} type="flex" align='middle'>
-                    {dockerId}
-                    <Button
-                    style={styles.btn2}
-                    type="link"
-                    onClick={()=>{this.handleCopy(dockerId)}}
-                    ><Icon type="copy"/></Button> 
-                    </Row>
-                </Item>
-                <Item label="Questioner">
-                    
-                    <Row style={{height:30}} type="flex" align='middle'>
-                   {username}
-                    </Row>
-                </Item>
-                </Descriptions>
-                {this.renderAnswer(test.answer)}
-            </Card>
+            this.renderTitle(title,desp,user,time)
         );
     }
 }

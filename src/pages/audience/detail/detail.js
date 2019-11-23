@@ -1,7 +1,6 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import { Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
-import User from './user'
 import QDetail from './qDetail'
 
 const { TabPane } = Tabs;

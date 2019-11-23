@@ -4,7 +4,7 @@ import copy from 'copy-to-clipboard';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import {Collapse,Typography,Card, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
-import User from './user'
+import User from '../../../components/auth/user'
 import { Diff2Html } from "diff2html";
 import "./resource/diff.css";
 const { Title,Paragraph } = Typography;
