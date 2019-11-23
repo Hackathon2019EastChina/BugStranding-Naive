@@ -9,7 +9,7 @@ const test={
 }
 
 var columns = [];
-export default class UCard extends BaseComponent {
+export default class CCard extends BaseComponent {
 
     constructor(props){
         super(props);

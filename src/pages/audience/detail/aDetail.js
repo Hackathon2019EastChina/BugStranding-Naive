@@ -9,13 +9,12 @@ const { TabPane } = Tabs;
 const { Title,Paragraph } = Typography;
 const { TextArea } = Input;
 
-export default class QDetail extends BaseComponent {
+export default class ADetail extends BaseComponent {
     constructor(props){
         super(props);
         this.state={
             found:false,
             question:0,
-            submit:false,
             edit:false
         }
     }
@@ -28,6 +27,12 @@ export default class QDetail extends BaseComponent {
         })
     };
 
+    componentWillMount(){
+        if(this.state.question==0)
+            this.setState({
+                question:this.props.data
+            })
+    }
     
     handleCopy=(dockerId)=>{
         if(copy(dockerId+""))
@@ -54,24 +59,8 @@ export default class QDetail extends BaseComponent {
                     <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
                 </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                    {!edit?(<Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>):
-                    <TextArea 
-                    style={{fontSize:18}}
-                    onChange={this.onChangeDesp}
-                    defaultValue={this.state.question.desp}
-                    placeholder="(Optional) Add more detail to your Question to attract more helper"
-                    autosize={{ minRows: 2, maxRows: 5 }}
-                    />}
+                    <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
                 </Row>
-                {!submit?<Row type="flex" justify="start" align="middle">
-                    <Icon type="loading" style={{marginRight:10}}/>
-                    <Typography style={{fontSize:18}}>Source Docker: {dockerId?dockerId:"empty"}</Typography> 
-                    <Button
-                    style={styles.btn2}
-                    type="link"
-                    onClick={()=>{this.handleCopy(dockerId?dockerId:"empty")}}
-                    ><Icon type="copy"/></Button> 
-                </Row>:null}
             </Row>
         )
     }
@@ -115,27 +104,26 @@ export default class QDetail extends BaseComponent {
     }
 
     renderAnswers=()=>{
-        if(this.state.submit){
-            const {answer}=this.state.question
-            if(answer.length==0){
-                return(
-                <Row style={{marginTop:100}} type="flex" justify="center">
-                    <Paragraph style={{fontSize:24}}>Kept you waiting, huh?</Paragraph>
-                </Row>)
-            }else{
-                return(
-                    <Row>
-                        {answer.map(this.renderAnswer)}
-                    </Row>
-                )
-            }
+        const {answer}=this.state.question
+        if(answer.length==0){
+            return(
+            <Row style={{marginTop:100}} type="flex" justify="center">
+                <Paragraph style={{fontSize:24}}>Be the first hero.</Paragraph>
+            </Row>)
         }else{
             return(
-                <Row style={{marginTop:100}} type="flex" justify="center">
-                    <Paragraph style={{fontSize:24}}>Submit the question to make it visible online</Paragraph>
+                <Row>
+                    {answer.map(this.renderAnswer)}
                 </Row>
             )
         }
+    }
+
+    renderNew(){
+        return(
+            <Row type="flex" justify="start" align="middle">
+            </Row>
+        )
     }
 
     render(){
@@ -152,6 +140,7 @@ export default class QDetail extends BaseComponent {
                         <Divider><Title level={3}>{answer.length+" Answers"}</Title></Divider>
                     </Row>
                     {this.renderAnswers()}
+                    {this.renderNew()}
                 </Col>
                 <Col lg={5} xs={1}/>
             </Row>
