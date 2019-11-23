@@ -1,0 +1,5 @@
+2019-05-29T04:32:49.613721Z 0 [Warning] [MY-000081] [Server] option 'read_buffer_size': unsigned value 0 adjusted to 8192.
+2019-05-29T04:32:49.613734Z 0 [Warning] [MY-000081] [Server] option 'read_rnd_buffer_size': unsigned value 0 adjusted to 1.
+2019-05-29T04:32:49.614214Z 0 [Warning] [MY-010915] [Server] 'NO_ZERO_DATE', 'NO_ZERO_IN_DATE' and 'ERROR_FOR_DIVISION_BY_ZERO' sql modes should be used with strict mode. They will be merged with strict mode in a future release.
+2019-05-29T04:32:49.615054Z 0 [ERROR] [MY-010095] [Server] Failed to access directory for --secure-file-priv. Please make sure that directory exists and is accessible by MySQL Server. Supplied value : C:/ProgramData/MySQL/MySQL Server 8.0/Uploads
+2019-05-29T04:32:49.624379Z 0 [ERROR] [MY-010119] [Server] Aborting
