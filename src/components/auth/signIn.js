@@ -73,25 +73,25 @@ class SignIn extends BaseComponent {
             style={{borderRadius:'20px'}}>
                 <Col>
                     <Row
-                    style={styles.cardContainer}>
-                        <div style={styles.welcome}>Welcome to Bug Stranding</div>
-                        <div style={styles.welcome2}>Sign In</div>
+                    style={styles.cardContainer} type="flex" justify='center'>
+                        <Row type="flex" justify="start" style={styles.welcome}>
+                            Welcome to Bug Stranding
+                        </Row>
+                        <Row type="flex" justify="start" style={styles.welcome2}>
+                            Sign In
+                        </Row>
                         <Form onSubmit={this.handleSubmit} type='flex' justify='center'>
-                            <Row justify='center'>
+                            <Row type="flex" justify='center'>
                                 <FormText  form={this.props.form}
-                                    label='Username' name='usrname' required={true} icon="user"/>
+                                    label='' name='usrname' required={true} icon="user"/>
 
                                 <FormText form={this.props.form}
-                                    label='Password' name='pwd' required={true} icon="lock"
+                                    label='' name='pwd' required={true} icon="lock"
                                     inputType="password"/>
-                            </Row>
-                            <Row type='flex' justify='center'>
-                                <Col>
-                                    <FormButton form={this.props.form} label="SignIn" style={styles.button}/>
-                                    <Button style={styles.button2} onClick={this.props.onCancel}>
-                                        Cancel
-                                    </Button>
-                                </Col>
+                                <FormButton form={this.props.form} label="SignIn" style={styles.button}/>
+                                <Button style={styles.button2} onClick={this.props.onCancel}>
+                                    Cancel
+                                </Button>
                             </Row>
                         </Form>
                         <Row type='flex' justify='center'>
@@ -145,14 +145,16 @@ const styles={
 
     welcome:{
         fontSize:25,
-        marginLeft: '30px',
+        width:"100%",
+        marginLeft: '80px',
         marginRight: '10px',
         marginBottom: '3px',
     },
     welcome2:{
         fontSize:17,
+        width:"100%",
         color:'#AAAAAA',
-        marginLeft: '30px',
+        marginLeft: '80px',
         marginRight: '10px',
         marginBottom: '10px',
     },

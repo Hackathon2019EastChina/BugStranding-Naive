@@ -81,20 +81,17 @@ class SignUp extends BaseComponent {
                         <div style={styles.welcome}>Welcome to Bug Stranding</div>
                         <div style={styles.welcome2}>Sign up</div>
                         <Form onSubmit={this.handleSubmit} type='flex' justify='center'>
-                            <Row justify='center'>
+                            <Row style={{width:"100%"}} type="flex" justify='center'>
                                 <FormText form={this.props.form}
-                                    label='Username' name='username' required={true} icon="user"/>
+                                     name='username' required={true} icon="user"/>
 
-                                <FormText form={this.props.form}
-                                    label='Password' name='password' required={true} icon="lock"
+                                <FormText form={this.props.form} style={{marginBottom:"10px"}}
+                                     name='password' required={true} icon="lock"
                                     inputType="password"/>
+                                <Row style={{width:"100%",marginLeft:"80px",color:'#AAAAAA',fontSize:15}} type="flex" justify='start'>Repeat:</Row>
                                 <FormText form={this.props.form}
-                                    label="Repeat" name="passwordAgain" required={true} icon='lock'
+                                     name="passwordAgain" required={true} icon='lock'
                                     inputType='password'/>
-                                {/* <FormText form={this.props.form}
-                                    label='姓名' name="name" required={true} icon="user"/> */}
-
-
                             </Row>
                             <Row type='flex' justify='center'>
                                 <Col>
@@ -156,14 +153,14 @@ const styles={
 
     welcome:{
         fontSize:25,
-        marginLeft: '30px',
+        marginLeft: '80px',
         marginRight: '10px',
         marginBottom: '3px',
     },
     welcome2:{
         fontSize:17,
         color:'#AAAAAA',
-        marginLeft: '30px',
+        marginLeft: '80px',
         marginRight: '10px',
         marginBottom: '10px',
     },

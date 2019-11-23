@@ -7,7 +7,7 @@ export class FormText extends Component {
     renderInput(){
         if(this.props.width)
             return <Input 
-            style={{width:this.props.width}} 
+            style={{width:this.props.widthz}} 
             type={this.props.inputType} 
             rows={this.props.rows} 
             prefix={<Icon type={this.props.icon} />} />
