@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import {Skeleton,Row,Card,AutoComplete,Input, Button,Icon} from 'antd';
+import {List,Skeleton,Row,Card,AutoComplete,Input, Button,Icon} from 'antd';
 import BaseComponent from './BaseComponent'
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
@@ -20,6 +20,9 @@ class QuestionBar extends BaseComponent {
             caption:"Submit",
             dockerId:"",
             qid:0,
+			optData:[{title:"1",description:"2"},
+        {title:"3",description:"4"}],
+        optVis : false,
         }
     };
 
@@ -30,6 +33,7 @@ class QuestionBar extends BaseComponent {
       }
 
     request=()=>{
+		        this.setState({optVis:false})
         const title=this.state.title
         if(title==""){
             this.pushNotification("danger","Title Shouldn't Be Empty")
@@ -138,6 +142,20 @@ class QuestionBar extends BaseComponent {
         this.setState({
             title:value
         })
+		if(value==""){
+            this.setState({optVis:false})
+        }
+        else{
+            this.setState({optVis:true})
+        }
+        this.get("/question/search?keywords="+value+"&limit=3",result=>{
+            var tt=result.question
+            var xx=tt.map(x=>({title:x.title,description:x.desp,qid:x.qid}))
+            this.setState({
+                optData:xx
+
+            })
+        })
     }
 
     onChangeDesp = ({ target: { value } }) => {
@@ -145,6 +163,41 @@ class QuestionBar extends BaseComponent {
             desp:value
         })
       };
+	  
+	  
+	  
+	    renderOpt(){
+        if(this.state.optVis){
+            return <div><span style={{fontSize:22}}>Here are the probable questions you may want to ask:</span>
+            <List
+            bordered={true}
+            itemLayout="horizontal"
+            dataSource={this.state.optData}
+            renderItem={item => (
+              <List.Item>
+                <List.Item.Meta
+                  title={<a title={"Press to view the details of the question"} style={{color:"white",fontSize:22}} onClick={()=>{
+                      var tx=this.loadStorage("user")
+                      var qid=item.qid
+                    this.props.history.push({
+                        pathname:"/user/detail",
+                        state:{qid,tx,completed:true}
+                    })
+                  }}>{item.title}</a>}
+                  description={<span style={{color:"white"}}>{item.description}</span>}
+                />
+              </List.Item>
+            )}
+          /></div>
+        }
+        else{
+            return
+        }
+
+
+
+    }
+
 
     renderInput=()=>{
         let style={}
@@ -182,6 +235,7 @@ class QuestionBar extends BaseComponent {
             <div
             onClick={()=>this.setState({isEnter:true})}>
                 {this.renderInput()}
+				{this.renderOpt()}
                 {this.renderDocker()}
             </div>
         );

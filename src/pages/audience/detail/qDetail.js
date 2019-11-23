@@ -112,14 +112,14 @@ export default class QDetail extends BaseComponent {
                     size="large"
                     type="default"
                     onClick={this.save}
-                    >Save Desc</Button>  
+                    >Save Description</Button>  
                 ):(
                     <Button
                     style={{ marginTop:10,marginLeft:10}}
                     size="large"
                     type="default"
                     onClick={()=>{this.setState({edit:true})}}
-                    >Edit Desc</Button>  
+                    >Edit Description</Button>  
                 )}
                 <Button
                 style={{ marginTop:10,marginLeft:10 }}

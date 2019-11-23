@@ -138,7 +138,7 @@ export default class ADetail extends BaseComponent {
                 size="large"
                 type="default"
                 onClick={this.save}
-                >Update Desc</Button>  
+                >Update Description</Button>  
                 <Button
                 style={{marginLeft:10}}
                 size="large"
@@ -196,8 +196,7 @@ export default class ADetail extends BaseComponent {
         var s1 = (result) => {
             if(result.status=="ok"){
                 this.setState({edit:true,loading:false,dockerId:result.dockerId,aid:result.aid})
-                this.pushNotification("success","Docker has been setup, redirecting!")
-                this.timeout(2000).then(()=>this.redirectDocker()) 
+                this.pushNotification("success","Docker has been setup!")
             }else{
                 this.pushNotification("danger", JSON.stringify(result));
             }
