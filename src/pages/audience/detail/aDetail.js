@@ -1,6 +1,6 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
-import { Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
+import {Avatar, Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
 import User from '../../../components/auth/user'
 import copy from 'copy-to-clipboard';
 import Answer from './answer'
@@ -19,6 +19,7 @@ export default class ADetail extends BaseComponent {
             desp:"",
             dockerId:"",
             aid:"",
+            time:"",
             loading:false
         }
     }
@@ -46,12 +47,8 @@ export default class ADetail extends BaseComponent {
                 </Col>
                 <Col span={24}>
                     <Row type="flex" justify="start" align="middle">
-                        <Paragraph style={{fontSize:20,marginBottom:10,marginRight:10}}>By：</Paragraph> 
-                        <User user={this.state.question.user}/>
+                        {this.renderUser(this.state.question.user,time)}
                     </Row>
-                </Col>
-                <Col span={24}>
-                    <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
                 </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
                     <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
@@ -61,9 +58,16 @@ export default class ADetail extends BaseComponent {
     }
 
     renderAnswer=(data)=>{
-        return(
-            <Answer data={data}/>
-        )
+        if(data.status!=0)
+            return(
+                <Answer data={data}/>
+            )
+        else{
+            if(!this.state.edit){
+                this.setState({edit:true,desp:data.desp,aid:data.aid,time:data.time})
+            }
+        }
+        return null
     }
 
     renderAnswers=()=>{
@@ -89,7 +93,7 @@ export default class ADetail extends BaseComponent {
                 <Row type="flex" justify="start" align="middle" 
                 style={{ marginTop:10,width:"100%"}}>
                     <Divider style={{marginBottom:10}}/>
-                    <Row style={{width:"100%",marginLeft:10,fontSize:18}}>
+                    <Row style={{width:"100%",marginLeft:5,fontSize:18}}>
                         You have no idea yet.
                     </Row>
                     <Button
@@ -100,32 +104,69 @@ export default class ADetail extends BaseComponent {
                     >Try out the problem! ></Button>  
                 </Row>  
             )
+        else{
         return(
             <Row type="flex" justify="start" align="middle" 
             style={{ marginTop:10,width:"100%"}}>
-                <Divider style={{marginBottom:10}}/>
+                <Divider style={{margin:0}}direction="left">
+                    <Title level={4}>My Answer</Title>
+                </Divider>
+                <Row style={{width:"100%",marginLeft:5,fontSize:18}}>
+                    Solution Brief:
+                </Row>
                 <TextArea
                 onChange={this.onChangeDesp}
+                defaultValue={this.state.desp}
                 placeholder="(Must) Describe your solution"
                 autosize={{ minRows: 2, maxRows: 5 }}
                 />
-                <Row style={{width:"100%",marginLeft:10,fontSize:16}}>
-                    Last copy of answer recovered.
+                <Row style={{marginLeft:5,width:"100%",marginBottom:10}} type="flex">
+                    <Row style={{width:"50%",fontSize:16}}>
+                        Last copy of answer recovered.
+                    </Row>
+                    <Row style={{width:"50%",fontSize:16}} type="flex" justify="end">
+                        {this.state.time}
+                    </Row>
                 </Row>
                 <Button
-                loading={this.state.loading}
                 size="large"
                 type="primary"
-                onClick={this.save}
-                >Update Solution</Button> 
+                onClick={this.redirectDocker}
+                >Enter Docker</Button>  
                 <Button
                 style={{marginLeft:10}}
-                loading={this.state.loading}
+                size="large"
+                type="default"
+                onClick={this.save}
+                >Update Desc</Button>  
+                <Button
+                style={{marginLeft:10}}
                 size="large"
                 type="danger"
                 onClick={this.submit}
                 >Submit</Button>   
             </Row>  
+        )
+        }
+    }
+
+    renderUser(user,time){
+        return (
+            <Row type="flex" style={{width:"100%"}}>
+                <Row type="flex" align='middle' justify="start">
+                    <Avatar shape="square" style={{marginRight:8,fontSize:30}} size={50}>
+                        {user.toUpperCase()[0]}
+                    </Avatar>
+                </Row>
+                <Col span={18} style={{padding:2}}>
+                    <Row type="flex" align='middle' justify="start" style={{width:"80%",fontSize:20}}>
+                        {user}
+                    </Row>
+                    <Row type="flex" align='middle' justify="start" style={{width:"80%",fontSize:16}}>
+                        {time}
+                    </Row>
+                </Col>
+            </Row>
         )
     }
 

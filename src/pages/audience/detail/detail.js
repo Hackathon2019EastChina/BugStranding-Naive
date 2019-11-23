@@ -32,7 +32,7 @@ export class Detail extends BaseComponent {
         }
 
         if(this.state.question==0)
-            this.getWithErrorAction('/question/get?user='+user+"&qid="+qid, successAction,errorAction);
+            this.getWithErrorAction('/question/get?user='+this.loadStorage("user")+"&qid="+qid, successAction,errorAction);
 
         
     }

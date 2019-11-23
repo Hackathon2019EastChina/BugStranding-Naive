@@ -3,121 +3,46 @@ import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
-import {Card, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions } from 'antd';
-const test={
-    "answer":[{
-        "desp":"222",
-        "dockerId":"A Docker",
-        "user":"nyako",
-        "diff":""
-    },{
-        "desp":"333",
-        "dockerId":"as",
-        "user":"asd",
-        "diff":""
-    }],
-    "desp":"A Large Prob",
-    "dockerId":"Q Docker",
-    "qid":"sadasdasfd",
-    "title":"Question 1",
-    "user":"Questioner"
-}
+import User from '../../../components/auth/user'
+import {Card,Typography, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions } from 'antd';
+const { Title,Paragraph } = Typography;
 
 var columns = [];
 class QCard extends BaseComponent {
-    
-    renderAnswer=(data)=>{
-        return(
-            <Table pagination={false} columns={columns} dataSource={data}  />
-        )
-    }
 
-    handleCopy=(dockerId)=>{
-        if(copy(dockerId+""))
-            this.pushNotification("success","Docker-"+dockerId+" has been copied. Please open it in VS Code")
-        else
-            this.pushNotification("danger","Copy Failed")
+    renderTitle=(title,desp,user,time,qid)=>{
+        return (
+            <Card style={{marginTop:8}} bodyStyle={{paddingTop:12,paddingBottom:12,margin:0}}>
+                <Row style={{fontSize:14,marginBottom:5}} type="flex" justify="start" align="middle">
+                    <Row style={{width:"50%"}}>
+                        <User user={user} small/>
+                    </Row>
+                    <Row style={{width:"50%"}} type="flex" justify="end">
+                        {time}
+                    </Row>
+                </Row>
+                <Row type="flex" justify="start" align="middle" style={{fontSize:18,width:"100%",marginBottom:3}}>
+                    <a onClick={()=>{this.props.history.push({
+                    pathname:"/user/detail",
+                    state:{qid,user,completed:true}
+                    })}}>
+                    {title} 
+                    </a>
+                </Row>
+                <Paragraph style={{marginBottom:0}}>
+                    {desp}
+                </Paragraph>
+            </Card>
+        );
     }
 
     componentWillMount(){
-        columns=[{
-            title: 'Solution Brief',
-            dataIndex: 'desp',
-          },
-          {
-            title: 'Answerer',
-            dataIndex: 'user',
-          },
-          {
-            title: 'Docker Id',
-            dataIndex: 'dockerId',
-          },
-          {
-            title: 'Action',
-            dataIndex: 'dockerId',
-            render: dockerId => (
-              <Row type="flex" justify='start' >
-                  <Button
-                  style={styles.btn}
-                  size="large"
-                  type="link"
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="copy"/></Button>  
-                  <Button
-                  type="link"
-                  size="large"
-                  style={styles.btn}
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="check"/></Button> 
-                  {/* 采纳和删除docker */}
-                  <Button
-                  type="link"
-                  size="large"
-                  style={styles.btn}
-                  onClick={()=>{this.handleCopy(dockerId)}}
-                  ><Icon type="stop"/></Button>  
-              </Row>
-            ),
-          }]
-    }
-    
-    getDetail=(qid,user)=>{
-        this.props.history.push({pathname:'/user/detail',state:{qid,user}})
     }
 
     render(){
-        const {desp,dockerId,title,user,qid}=test
-        const {Item}=Descriptions
+        const {desp,title,user,qid,time}=this.props.data
         return (
-        <Card title={"Title: "+title} 
-            extra={
-                <Button type="link" onClick={
-                    ()=>this.getDetail(qid,user)
-                }>Question Detail</Button>} 
-            style={styles.container}>
-            <Descriptions  bordered>
-                <Item span={3} label="Description">
-                    {desp}
-                </Item>
-                <Item label="Source Docker" >
-                    <Row style={{height:30}} type="flex" align='middle'>
-                    {dockerId}
-                    <Button
-                    style={styles.btn2}
-                    type="link"
-                    onClick={()=>{this.handleCopy(dockerId)}}
-                    ><Icon type="copy"/></Button> 
-                    </Row>
-                </Item>
-                <Item label="Questioner">
-                    
-                    <Row style={{height:30}} type="flex" align='middle'>
-                   {user}
-                    </Row>
-                </Item>
-                </Descriptions>
-                {this.renderAnswer(test.answer)}
-            </Card>
+            this.renderTitle(title,desp,user,time,qid)  //title,desp,user,time,qid
         );
     }
 }

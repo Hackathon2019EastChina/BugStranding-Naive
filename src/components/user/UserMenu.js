@@ -24,7 +24,9 @@ class UserMenu extends BaseComponent{
         if (this.props.user === null) 
             return null;
         return (
-            <Avatar style={styles.avatar}>{this.props.user[0]}</Avatar>
+            <Avatar style={styles.avatar}>
+                {this.props.user.toUpperCase()[0]}
+            </Avatar>
         )
     }
     /* <Avatar style={styles.avatar} src={this.getImagePath(this.props.user.avatarId)}/> */

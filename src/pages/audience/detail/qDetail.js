@@ -1,6 +1,6 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
-import { Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
+import { Avatar, Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
 import User from '../../../components/auth/user'
 import copy from 'copy-to-clipboard';
 import Answer from './answer'
@@ -16,8 +16,14 @@ export default class QDetail extends BaseComponent {
             found:false,
             question:0,
             submit:false,
-            edit:false
+            edit:true
         }
+    }
+
+    componentWillMount(){
+        this.state.question=this.props.data
+        this.state.submit=this.props.data.status
+        this.state.edit=!this.props.data.status
     }
 
     onChangeDesp = ({ target: { value } }) => {
@@ -28,16 +34,8 @@ export default class QDetail extends BaseComponent {
         })
     };
 
-    
-    handleCopy=(dockerId)=>{
-        if(copy(dockerId+""))
-            this.pushNotification("success","Docker-"+dockerId+" has been copied. Please open it in VS Code")
-        else
-            this.pushNotification("danger","Copy Failed")
-    }
-
     renderTitle=(title,desp)=>{
-        const {edit,submit}=this.state
+        const {edit}=this.state
         const {time,dockerId}=this.state.question
         return(
             <Row type="flex" justify="start" align="middle">
@@ -46,15 +44,11 @@ export default class QDetail extends BaseComponent {
                 </Col>
                 <Col span={24}>
                     <Row type="flex" justify="start" align="middle">
-                        <Paragraph style={{fontSize:20,marginBottom:10,marginRight:10}}>By：</Paragraph> 
-                        <User user={this.state.question.user}/>
+                        {this.renderUser(this.state.question.user,time)}
                     </Row>
                 </Col>
-                <Col span={24}>
-                    <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
-                </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                    {!edit?(<Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>):
+                    {!edit?(<Paragraph style={{fontSize:18,marginVertical:5}}>{desp}</Paragraph>):
                     <TextArea 
                     style={{fontSize:18}}
                     onChange={this.onChangeDesp}
@@ -63,15 +57,33 @@ export default class QDetail extends BaseComponent {
                     autosize={{ minRows: 2, maxRows: 5 }}
                     />}
                 </Row>
-                {!submit?<Row type="flex" justify="start" align="middle">
-                    <Icon type="loading" style={{marginRight:10}}/>
-                    <Typography style={{fontSize:18}}>Source Docker: {dockerId?dockerId:"empty"}</Typography> 
-                    <Button
-                    style={styles.btn2}
-                    type="link"
-                    onClick={()=>{this.handleCopy(dockerId?dockerId:"empty")}}
-                    ><Icon type="copy"/></Button> 
-                </Row>:null}
+                
+            </Row>
+        )
+    }
+    
+    redirectDocker=()=>{
+        var win = window.open(
+            this.ip+"/dockerId/in?user="+this.loadStorage("user")+"&dockerId="+this.state.dockerId, '_blank');
+        win.focus()
+    }
+
+    renderUser(user,time){
+        return (
+            <Row type="flex" style={{width:"100%"}}>
+                <Row type="flex" align='middle' justify="start">
+                    <Avatar shape="square" style={{marginRight:8,fontSize:30}} size={50}>
+                        {user.toUpperCase()[0]}
+                    </Avatar>
+                </Row>
+                <Col span={18} style={{padding:2}}>
+                    <Row type="flex" align='middle' justify="start" style={{width:"80%",fontSize:20}}>
+                        {user}
+                    </Row>
+                    <Row type="flex" align='middle' justify="start" style={{width:"80%",fontSize:16}}>
+                        {time}
+                    </Row>
+                </Col>
             </Row>
         )
     }
@@ -79,22 +91,33 @@ export default class QDetail extends BaseComponent {
     renderConfirm=()=>{
         if(this.state.submit)
             return null;
+        else{
         return(
             <Row type="flex" justify="start" align="middle">
-                
-                <Divider style={{margin:0}}/>
+                <Divider style={{width:"100%",marginBottom:3}}/>
+                {!this.state.submit?
+                <Row type="flex" justify="start" align="middle" style={{width:"100%"}}>
+                    <Typography style={{fontSize:18}}>Docker-{this.state.question.dockerId} is running</Typography> 
+                    <Icon type="loading" style={{marginLeft:10}}/>
+                </Row>:null}
+                <Button
+                style={{marginTop:10}}
+                size="large"
+                type="primary"
+                onClick={this.redirectDocker}
+                >Enter Docker</Button>  
                 {this.state.edit?(
                     <Button
-                    style={{ marginTop:10,marginLeft:10  }}
+                    style={{ marginTop:10,marginLeft:10}}
                     size="large"
-                    type="primary"
+                    type="default"
                     onClick={this.save}
-                    >Update</Button>  
+                    >Save Desc</Button>  
                 ):(
                     <Button
-                    style={{ marginTop:10 }}
+                    style={{ marginTop:10,marginLeft:10}}
                     size="large"
-                    type="primary"
+                    type="default"
                     onClick={()=>{this.setState({edit:true})}}
                     >Edit Desc</Button>  
                 )}
@@ -106,6 +129,7 @@ export default class QDetail extends BaseComponent {
                 >Submit Question</Button>  
             </Row>
         )
+        }
     }
 
     renderAnswer=(data)=>{
@@ -139,8 +163,6 @@ export default class QDetail extends BaseComponent {
     }
 
     render(){
-        this.state.question=this.props.data
-        this.state.submit=this.props.data.status
         const {desp,time,title,user,answer}=this.state.question
         return (
             <Row style={styles.container} >
@@ -184,7 +206,7 @@ export default class QDetail extends BaseComponent {
         var successAction = (result) => {
             if(result.status=="ok"){
                 this.pushNotification("success","Submit Succeeded")
-                this.setState({submit:true})
+                this.setState({submit:true,edit:false})
             }else{
                 this.pushNotification("danger", JSON.stringify(result));
             }

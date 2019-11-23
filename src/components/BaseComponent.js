@@ -11,6 +11,8 @@ export class BaseComponent extends Component {
     ip = "http://211.65.35.118:3000";  
     // remote
     //  ip = "http://ifnya.com:3000";
+    // remote Azure
+    //  ip = "http:// :3000"
 
 
     post = (url, form, successAction,unsuccessAction,errorAction) => {

@@ -37,7 +37,7 @@ class SignIn extends BaseComponent {
                 if(result.status=="ok"){
                     this.handleSuccess(values.usrname);
                 }else{
-                    this.pushNotification("danger", JSON.stringify(result));
+                    this.pushNotification("danger", "Username or Password Wrong");
                 }
             }
 
