@@ -15,34 +15,29 @@ export default class ADetail extends BaseComponent {
         this.state={
             found:false,
             question:0,
-            edit:false
+            edit:false,
+            desp:"",
+            dockerId:"",
+            aid:"",
+            loading:false
         }
     }
 
     onChangeDesp = ({ target: { value } }) => {
-        var q=this.state.question
-        q.desp=value
         this.setState({
-            question:q
+            desp:value
         })
     };
 
     componentWillMount(){
+        //get my answer
         if(this.state.question==0)
             this.setState({
                 question:this.props.data
             })
     }
-    
-    handleCopy=(dockerId)=>{
-        if(copy(dockerId+""))
-            this.pushNotification("success","Docker-"+dockerId+" has been copied. Please open it in VS Code")
-        else
-            this.pushNotification("danger","Copy Failed")
-    }
 
     renderTitle=(title,desp)=>{
-        const {edit,submit}=this.state
         const {time,dockerId}=this.state.question
         return(
             <Row type="flex" justify="start" align="middle">
@@ -61,38 +56,6 @@ export default class ADetail extends BaseComponent {
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
                     <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
                 </Row>
-            </Row>
-        )
-    }
-
-    renderConfirm=()=>{
-        if(this.state.submit)
-            return null;
-        return(
-            <Row type="flex" justify="start" align="middle">
-                
-                <Divider style={{margin:0}}/>
-                {this.state.edit?(
-                    <Button
-                    style={{ marginTop:10,marginLeft:10  }}
-                    size="large"
-                    type="primary"
-                    onClick={this.save}
-                    >Update</Button>  
-                ):(
-                    <Button
-                    style={{ marginTop:10 }}
-                    size="large"
-                    type="primary"
-                    onClick={()=>{this.setState({edit:true})}}
-                    >Edit Desc</Button>  
-                )}
-                <Button
-                style={{ marginTop:10,marginLeft:10 }}
-                size="large"
-                type="danger"
-                onClick={this.submit}
-                >Submit Question</Button>  
             </Row>
         )
     }
@@ -120,22 +83,60 @@ export default class ADetail extends BaseComponent {
     }
 
     renderNew(){
+        //get prev answer of user
+        if(!this.state.edit)
+            return(
+                <Row type="flex" justify="start" align="middle" 
+                style={{ marginTop:10,width:"100%"}}>
+                    <Divider style={{marginBottom:10}}/>
+                    <Row style={{width:"100%",marginLeft:10,fontSize:18}}>
+                        You have no idea yet.
+                    </Row>
+                    <Button
+                    loading={this.state.loading}
+                    size="large"
+                    type="primary"
+                    onClick={this.offer}
+                    >Try out the problem! ></Button>  
+                </Row>  
+            )
         return(
-            <Row type="flex" justify="start" align="middle">
-            </Row>
+            <Row type="flex" justify="start" align="middle" 
+            style={{ marginTop:10,width:"100%"}}>
+                <Divider style={{marginBottom:10}}/>
+                <TextArea
+                onChange={this.onChangeDesp}
+                placeholder="(Must) Describe your solution"
+                autosize={{ minRows: 2, maxRows: 5 }}
+                />
+                <Row style={{width:"100%",marginLeft:10,fontSize:16}}>
+                    Last copy of answer recovered.
+                </Row>
+                <Button
+                loading={this.state.loading}
+                size="large"
+                type="primary"
+                onClick={this.save}
+                >Update Solution</Button> 
+                <Button
+                style={{marginLeft:10}}
+                loading={this.state.loading}
+                size="large"
+                type="danger"
+                onClick={this.offer}
+                >Submit</Button>   
+            </Row>  
         )
     }
 
     render(){
         this.state.question=this.props.data
-        this.state.submit=this.props.data.status
         const {desp,time,title,user,answer}=this.state.question
         return (
             <Row style={styles.container} >
                 <Col lg={4} xs={1}/>
                 <Col lg={15} xs={22}>
                     {this.renderTitle(title,desp)}
-                    {this.renderConfirm()}
                     <Row type="flex" justify="start" style={{marginTop:20}}>
                         <Divider><Title level={3}>{answer.length+" Answers"}</Title></Divider>
                     </Row>
@@ -147,13 +148,38 @@ export default class ADetail extends BaseComponent {
         )
     }
 
-    save=()=>{
+    offer=()=>{
+        this.setState({loading:true})
         const {qid,title,desp}=this.state.question
         const user=this.loadStorage("user")
+        var s1 = (result) => {
+            if(result.status=="ok"){
+                this.setState({edit:true,loading:false,dockerId:result.dockerId,aid:result.aid})
+                this.pushNotification("success","Docker has been setup, redirecting!")
+                this.timeout(2000).then(()=>this.redirectDocker()) 
+            }else{
+                this.pushNotification("danger", JSON.stringify(result));
+            }
+        }
+
+        var e1 = (result) => {
+            this.pushNotification("danger", "Request Failed");
+        }
+
+        this.getWithErrorAction(
+            "/answer/create?user="+user+"&qid="+qid
+            ,s1,e1)
+    }
+
+    save=()=>{
+        if(this.state.desp==null||this.state.desp==""){
+            this.pushNotification("danger","Describe your solution, less or more")
+            return null;
+        }
+        const {aid,desp}=this.state
         var successAction = (result) => {
             if(result.status=="ok"){
                 this.pushNotification("success","Update Succeeded")
-                this.setState({edit:false})
             }else{
                 this.pushNotification("danger", JSON.stringify(result));
             }
@@ -163,17 +189,19 @@ export default class ADetail extends BaseComponent {
             this.pushNotification("danger", "Update Failed");
         }
 
-        this.getWithErrorAction("/question/save?qid="+qid+"&title="+title+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/answer/save?aid="+aid+"&desp="+desp,successAction,errorAction)
     }
-
     
     submit=()=>{
-        const {qid,title,desp}=this.state.question
-        const user=this.loadStorage("user")
+        if(this.state.desp==null||this.state.desp==""){
+            this.pushNotification("danger","Describe your solution, less or more")
+            return null;
+        }
+        const {aid,desp}=this.state
         var successAction = (result) => {
             if(result.status=="ok"){
                 this.pushNotification("success","Submit Succeeded")
-                this.setState({submit:true})
+                this.setState({edit:false})
             }else{
                 this.pushNotification("danger", JSON.stringify(result));
             }
@@ -183,13 +211,20 @@ export default class ADetail extends BaseComponent {
             this.pushNotification("danger", "Submit Failed");
         }
 
-        this.getWithErrorAction("/question/submit?qid="+qid+"&title="+title+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/answer/submit?aid="+aid+"&desp="+desp,successAction,errorAction)
+    }
+
+    redirectDocker=()=>{
+        var win = window.open(
+            this.ip+"/dockerId/in?user="+this.loadStorage("user")+"&dockerId="+this.state.dockerId, '_blank');
+        win.focus()
     }
 }
 
 const styles = {
     container:{
-        marginTop:"50px"
+        marginTop:"50px",
+        paddingBottom:"50px"
     }
 }
 
