@@ -22,20 +22,20 @@ class SignUp extends BaseComponent {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (values.username === '' ) {
-                this.pushNotification("danger","用户名不能为空",this.props.dispatch);
+                this.pushNotification("danger","Username is empty!",this.props.dispatch);
                 return;
             }
             if(values.password === ''){
-                this.pushNotification("danger","密码不能为空",this.props.dispatch);
+                this.pushNotification("danger","Password is empty!",this.props.dispatch);
                 return;
             }
         if(values.passwordAgain !== values.password){
-            this.pushNotification("danger","密码不一致！",this.props.dispatch);
+            this.pushNotification("danger","The two passwords are not the same!",this.props.dispatch);
             return;
         }
-            if(values.name===''){
-                this.pushNotification("danger","姓名不能为空",this.props.dispatch);
-            }
+            // if(values.name===''){
+            //     this.pushNotification("danger","姓名不能为空",this.props.dispatch);
+            // }
             if (!err) {
                 console.log("hey");
                 console.log('Received values of form: ', values);
@@ -44,19 +44,19 @@ class SignUp extends BaseComponent {
             let form = new FormData();
             form.append('username', values.username);
             form.append('password', md5(values.password));
-            form.append('name',values.name);
+            // form.append('name',values.name);
 
             var successAction = (result) => {
                 localStorage.setItem('user', JSON.stringify(result.content));
                 this.props.switch()
-                this.pushNotification("success", "用户注册成功，请登录");
+                this.pushNotification("success", "Sign up succesfully! Please sign in!");
             }
 
             var unsuccessAction = (result) => {
                 this.pushNotification("danger", result.message);
             }
 
-            this.post('/register', form, successAction,unsuccessAction);
+            this.get("/signin?username="+values.username+"&password="+values.password,successAction)
 
         });
     }
@@ -78,36 +78,36 @@ class SignUp extends BaseComponent {
                 <Col>
                     <Row
                     style={styles.cardContainer}>
-                        <div style={styles.welcome}>欢迎使用Seec影院系统</div>
-                        <div style={styles.welcome2}>注册</div>
+                        <div style={styles.welcome}>Welcome to Bug Stranding</div>
+                        <div style={styles.welcome2}>Sign up</div>
                         <Form onSubmit={this.handleSubmit} type='flex' justify='center'>
                             <Row justify='center'>
                                 <FormText form={this.props.form}
-                                    label='用户名' name='username' required={true} icon="user"/>
+                                    label='Username' name='username' required={true} icon="user"/>
 
                                 <FormText form={this.props.form}
-                                    label='密码' name='password' required={true} icon="lock"
+                                    label='Password' name='password' required={true} icon="lock"
                                     inputType="password"/>
                                 <FormText form={this.props.form}
-                                    label='重复密码' name="passwordAgain" required={true} icon='lock'
+                                    label="Repeat" name="passwordAgain" required={true} icon='lock'
                                     inputType='password'/>
-                                <FormText form={this.props.form}
-                                    label='姓名' name="name" required={true} icon="user"/>
+                                {/* <FormText form={this.props.form}
+                                    label='姓名' name="name" required={true} icon="user"/> */}
 
 
                             </Row>
                             <Row type='flex' justify='center'>
                                 <Col>
-                                    <FormButton form={this.props.form} label="注册" style={styles.button}/>
+                                    <FormButton form={this.props.form} label="Sign up" style={styles.button}/>
                                     <Button style={styles.button2} onClick={this.props.onCancel}>
-                                        返回
+                                        Cancel
                                     </Button>
                                 </Col>
                             </Row>
                         </Form>
                         <Row type='flex' justify='center'>
                             <Col>
-                                已有账号? <Button onClick={this.props.switch} type="link">立即登录</Button>
+                                Already a member? <Button onClick={this.props.switch} type="link">Sign in now</Button>
                             </Col>
                         </Row>
                     </Row>

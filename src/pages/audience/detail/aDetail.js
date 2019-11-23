@@ -123,7 +123,7 @@ export default class ADetail extends BaseComponent {
                 loading={this.state.loading}
                 size="large"
                 type="danger"
-                onClick={this.offer}
+                onClick={this.submit}
                 >Submit</Button>   
             </Row>  
         )
