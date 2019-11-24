@@ -5,6 +5,7 @@ import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
 import User from '../../../components/auth/user'
 import {Card,Typography, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions } from 'antd';
+import Description from '../../../components/markd/Description'
 const { Title,Paragraph } = Typography;
 
 var columns = [];
@@ -30,7 +31,7 @@ class QCard extends BaseComponent {
                     </a>
                 </Row>
                 <Paragraph style={{marginBottom:0}}>
-                    {desp}
+                    <Description desp={desp}/>
                 </Paragraph>
             </Card>
         );

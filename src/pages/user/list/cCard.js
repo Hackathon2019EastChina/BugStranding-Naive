@@ -3,6 +3,7 @@ import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
 import {Card, Row, Col, Typography,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
 import User from '../../../components/auth/user'
+import Description from '../../../components/markd/Description'
 const { TextArea } = Input;
 const { Title,Paragraph } = Typography;
 const test={
@@ -36,7 +37,9 @@ export default class CCard extends BaseComponent {
                     <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
                 </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                    <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
+                    <Paragraph style={{fontSize:18,marginBottom:5}}>
+                        <Description desp={desp}/>
+                    </Paragraph>
                 </Row>
             </Row>
         )

@@ -1,9 +1,8 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import {Avatar, Row, Col, Tabs,Button,Typography,Input,Divider } from 'antd';
-import User from '../../../components/auth/user'
-import copy from 'copy-to-clipboard';
 import Answer from './answer'
+import Description from '../../../components/markd/Description'
 import { connect } from 'react-redux';
 import { showSignIn } from "../../../redux/actions/action";
 
@@ -55,7 +54,9 @@ class ADetail extends BaseComponent {
                     </Row>
                 </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                    <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
+                    <Paragraph style={{fontSize:18,marginBottom:5}}>
+                        <Description desp={desp}/>
+                    </Paragraph>
                 </Row>
             </Row>
         )
@@ -238,7 +239,7 @@ class ADetail extends BaseComponent {
             this.pushNotification("danger", "Update Failed");
         }
 
-        this.getWithErrorAction("/answer/save?aid="+aid+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/answer/save?aid="+aid+"&desp="+escape(desp),successAction,errorAction)
     }
     
     submit=()=>{
@@ -260,7 +261,7 @@ class ADetail extends BaseComponent {
             this.pushNotification("danger", "Submit Failed");
         }
 
-        this.getWithErrorAction("/answer/submit?aid="+aid+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/answer/submit?aid="+aid+"&desp="+escape(desp),successAction,errorAction)
     }
 
     redirectDocker=()=>{

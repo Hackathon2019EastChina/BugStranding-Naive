@@ -1,8 +1,9 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
-import {Card, Row, Col, Typography,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
+import {Card, Row, Col, Typography,Button,Icon, Table,Divider,Input } from 'antd';
 import User from '../../../components/auth/user'
+import Description from '../../../components/markd/Description'
 import {withRouter} from "react-router-dom";
 const { TextArea } = Input;
 const { Title,Paragraph } = Typography;
@@ -24,25 +25,6 @@ class UCard extends BaseComponent {
     }
 
     renderTitle=(title,desp,user,time,qid)=>{
-        // return(
-        //     <Row type="flex" justify="start" align="middle">
-        //         <Col span={24}>
-        //             <Title level={2}>{title}</Title>
-        //         </Col>
-        //         <Col span={24}>
-        //             <Row type="flex" justify="start" align="middle">
-        //                 <User user={user}/>
-        //             </Row>
-        //         </Col>
-        //         <Col span={24}>
-        //             <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
-        //         </Col>
-        //         <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-        //             <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
-        //         </Row>
-        //     </Row>
-        // )
-
         return (
             <Card 
                 style={{width:"100%",marginBottom:20}}
@@ -61,7 +43,9 @@ class UCard extends BaseComponent {
                      <Paragraph style={{fontSize:18,marginBottom:5}}>{time}</Paragraph> 
                  </Col>
                  <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                     <Paragraph style={{fontSize:18,marginBottom:5}}>{desp}</Paragraph>
+                     <Paragraph style={{fontSize:18,marginBottom:5}}>
+                        <Description desp={desp}/>
+                     </Paragraph>
                  </Row>
             </Card>
 

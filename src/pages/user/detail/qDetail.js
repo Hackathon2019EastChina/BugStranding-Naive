@@ -1,9 +1,8 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import { Avatar, Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
-import User from '../../../components/auth/user'
-import copy from 'copy-to-clipboard';
 import Answer from './answer'
+import Description from '../../../components/markd/Description'
 
 const { TabPane } = Tabs;
 const { Title,Paragraph } = Typography;
@@ -48,7 +47,9 @@ export default class QDetail extends BaseComponent {
                     </Row>
                 </Col>
                 <Row type="flex" justify="start" align="middle" style={{width: '100%'}}>  
-                    {!edit?(<Paragraph style={{fontSize:18,marginVertical:5}}>{desp}</Paragraph>):
+                    {!edit?(<Paragraph style={{fontSize:18,marginVertical:5}}>
+                            <Description desp={desp}/>
+                        </Paragraph>):
                     <TextArea 
                     style={{fontSize:18}}
                     onChange={this.onChangeDesp}
@@ -195,8 +196,7 @@ export default class QDetail extends BaseComponent {
         var errorAction = (result) => {
             this.pushNotification("danger", "Update Failed");
         }
-
-        this.getWithErrorAction("/question/save?qid="+qid+"&title="+title+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/question/save?qid="+qid+"&title="+title+"&desp="+escape(desp),successAction,errorAction)
     }
 
     
@@ -216,7 +216,7 @@ export default class QDetail extends BaseComponent {
             this.pushNotification("danger", "Submit Failed");
         }
 
-        this.getWithErrorAction("/question/submit?qid="+qid+"&title="+title+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/question/submit?qid="+qid+"&title="+title+"&desp="+escape(desp),successAction,errorAction)
     }
 }
 

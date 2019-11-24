@@ -3,6 +3,7 @@ import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
+import Description from '../../../components/markd/Description'
 import {Avatar,Collapse,Typography,Card, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
 import User from '../../../components/auth/user'
 import { Diff2Html } from "diff2html";
@@ -58,7 +59,9 @@ class Answer extends BaseComponent {
                 <Row style={{width:"100%"}}>
                     {this.renderUser(user,time)}
                 </Row>
-                <Paragraph style={{fontSize:22}}>{desp}</Paragraph>
+                <Paragraph style={{fontSize:22}}>
+                    <Description desp={desp}/>
+                </Paragraph>
                 <Collapse defaultActiveKey={['1']} >
                     <Panel header="Show me the code" key="1">
                         {this.renderDiff(diff)}

@@ -91,7 +91,7 @@ class QuestionBar extends BaseComponent {
             this.pushNotification("danger", "Submit Failed");
         }
 
-        this.getWithErrorAction("/question/save?qid="+this.state.qid+"&title="+title+"&desp="+desp,successAction,errorAction)
+        this.getWithErrorAction("/question/save?qid="+this.state.qid+"&title="+title+"&desp="+escape(desp),successAction,errorAction)
     }
 
     renderDocker=()=>{

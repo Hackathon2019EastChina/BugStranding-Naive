@@ -14,7 +14,6 @@ export class BaseComponent extends Component {
     // remote Azure
     ip = "http://nyako.moe:3000"
 
-
     post = (url, form, successAction,unsuccessAction,errorAction) => {
         return fetch(this.ip + url, { 
             method: 'POST', 

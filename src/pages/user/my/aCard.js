@@ -3,6 +3,7 @@ import BaseComponent from '../../../components/BaseComponent'
 import copy from 'copy-to-clipboard';
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
+import Description from '../../../components/markd/Description'
 import {Card, Row, Col, AutoComplete,Button,Icon, Table,Divider,Descriptions,Input } from 'antd';
 const { TextArea } = Input;
 const test={
@@ -86,7 +87,7 @@ class ACard extends BaseComponent {
             style={styles.container}>
                 <Descriptions  bordered>
                     <Item span={3} label="Description">
-                        {desp}
+                        <Description desp={desp}/>
                     </Item>
                     <Item span={1} label="Questioner">
                         <Row style={{height:30}} type="flex" align='middle'>
