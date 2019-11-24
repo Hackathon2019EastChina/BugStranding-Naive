@@ -2,6 +2,7 @@ import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
 import { Row, Col, AutoComplete,Tabs } from 'antd';
 import QCard from './qCard'
+import ErrorPage from '../../../components/ErrorPage'
 const { TabPane } = Tabs;
 
 export class My extends BaseComponent {
@@ -44,36 +45,38 @@ export class My extends BaseComponent {
     }
 
     render(){
-        if(this.state.data.length){
-            if(this.state.data.length>0)
-                return (
-                    <Row style={styles.container} >
-                        <Col lg={6} xs={1}/>
-                        <Col lg={12} xs={22}>
-                            <Tabs defaultActiveKey="1">
-                                <TabPane tab="Answers" key="1">
-                                    {this.state.data.map(this.renderQCard)}
-                                </TabPane>
-                                <TabPane tab="Questions" key="2">
-                                    {this.state.data.map(this.renderACard)}
-                                </TabPane>
-                            </Tabs>
-                        </Col>
-                        <Col lg={6} xs={1}/>
+        if(!this.loadStorage("user")||this.loadStorage("user")=="")
+            return(
+            <Row type="flex" justify="center" style={{marginTop:200}}>
+                <ErrorPage text={"You have not logged in."}/>
+            </Row>)
+            
+        if(this.state.data.length)
+            return (
+                <Row style={styles.container} >
+                    <Col lg={6} xs={1}/>
+                    <Col lg={12} xs={22}>
+                        <Tabs defaultActiveKey="1">
+                            <TabPane tab="Answers" key="1">
+                                {this.state.data.map(this.renderQCard)}
+                            </TabPane>
+                            <TabPane tab="Questions" key="2">
+                                {this.state.data.map(this.renderACard)}
+                            </TabPane>
+                        </Tabs>
+                    </Col>
+                    <Col lg={6} xs={1}/>
+                </Row>
+            );
+        else
+            return(
+                <Row style={styles.container} type="flex" justify="center">
+                    <Row style={{fontSize:22,marginTop:300}}>
+                        No questions or answers yet.
                     </Row>
-                );
-            else
-                return(
-                    <Row style={styles.container} type="flex" justify="center">
-                        <Row style={{fontSize:22,marginTop:300}}>
-                            No questions or answers yet.
-                        </Row>
-                    </Row>
-                )
-        }
-        else{
-            return null
-        }
+                </Row>
+            )
+        
     }
 }
 

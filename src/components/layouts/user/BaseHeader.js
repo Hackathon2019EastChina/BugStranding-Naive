@@ -123,13 +123,13 @@ class BaseHeader extends BaseComponent {
     renderLeftHeader=()=>{
         return(
             <Col xs={0} sm={0} lg={10}>
-                <Col  sm={0} lg={8}>
+                <Col  sm={0} lg={10}>
                     {/* 当屏幕分辨率小于sm值时隐藏logo */}
                     <Row type="flex" justify='center'>
                         <img style={styles.logo} src={require("./resource/logo.png")} />
                     </Row>
                 </Col>
-                <Col sm={12} lg={12}>
+                <Col sm={12} lg={10}>
                     <SearchBar/>
                 </Col>
             </Col>

@@ -8,11 +8,11 @@ export class BaseComponent extends Component {
     // local
     //ip = "http://localhost:3000";  
     // local_peer
-    ip = "http://211.65.35.118:3000";  
+    // ip = "http://211.65.35.118:3000";  
     // remote
-    //  ip = "http://ifnya.com:3000";
+    // ip = "http://ifnya.com:3000";
     // remote Azure
-    //  ip = "http:// :3000"
+    ip = "http://nyako.moe:3000"
 
 
     post = (url, form, successAction,unsuccessAction,errorAction) => {

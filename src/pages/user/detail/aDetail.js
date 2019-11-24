@@ -1,15 +1,19 @@
 import React from "react";
 import BaseComponent from '../../../components/BaseComponent'
-import {Avatar, Icon,Row, Col, AutoComplete,Tabs,Button,Typography,Input,Divider } from 'antd';
+import {Avatar, Row, Col, Tabs,Button,Typography,Input,Divider } from 'antd';
 import User from '../../../components/auth/user'
 import copy from 'copy-to-clipboard';
 import Answer from './answer'
+import { connect } from 'react-redux';
+import { showSignIn } from "../../../redux/actions/action";
 
 const { TabPane } = Tabs;
 const { Title,Paragraph } = Typography;
 const { TextArea } = Input;
-
-export default class ADetail extends BaseComponent {
+const mapStateToProps = state => ({
+    keyword: state.keywordReducer.keyword,
+})
+class ADetail extends BaseComponent {
     constructor(props){
         super(props);
         this.state={
@@ -190,6 +194,11 @@ export default class ADetail extends BaseComponent {
     }
 
     offer=()=>{
+        if(!this.loadStorage("user")||this.loadStorage("user")==""){
+            this.pushNotification("danger","Please Login First")
+            this.props.dispatch(showSignIn())
+            return null;
+        }
         this.setState({loading:true})
         const {qid,title,desp}=this.state.question
         const user=this.loadStorage("user")
@@ -268,3 +277,5 @@ const styles = {
     }
 }
 
+
+export default connect(mapStateToProps)(ADetail);

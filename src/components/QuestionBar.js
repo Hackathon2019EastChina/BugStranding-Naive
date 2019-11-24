@@ -3,6 +3,7 @@ import {List,Skeleton,Row,Card,AutoComplete,Input, Button,Icon} from 'antd';
 import BaseComponent from './BaseComponent'
 import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux';
+import { showSignIn } from "../redux/actions/action";
 
 const { TextArea } = Input;
 const mapStateToProps = state => ({
@@ -33,7 +34,12 @@ class QuestionBar extends BaseComponent {
       }
 
     request=()=>{
-		        this.setState({optVis:false})
+        this.setState({optVis:false})
+        if(!this.loadStorage("user")||this.loadStorage("user")==""){
+            this.pushNotification("danger","Please Login First")
+            this.props.dispatch(showSignIn())
+            return null;
+        }
         const title=this.state.title
         if(title==""){
             this.pushNotification("danger","Title Shouldn't Be Empty")
@@ -148,14 +154,15 @@ class QuestionBar extends BaseComponent {
         else{
             this.setState({optVis:true})
         }
-        this.get("/question/search?keywords="+value+"&limit=3",result=>{
-            var tt=result.question
-            var xx=tt.map(x=>({title:x.title,description:x.desp,qid:x.qid}))
-            this.setState({
-                optData:xx
+        if(value!="")
+            this.get("/question/search?keywords="+value+"&limit=3",result=>{
+                var tt=result.question
+                var xx=tt.map(x=>({title:x.title,description:x.desp,qid:x.qid}))
+                this.setState({
+                    optData:xx
 
+                })
             })
-        })
     }
 
     onChangeDesp = ({ target: { value } }) => {
