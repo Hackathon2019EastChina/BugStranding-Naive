@@ -1,6 +1,6 @@
 import React,{Component} from "react";
 import * as Pages from "../pages";
-import AudienceLayout from '../components/layouts/audience/AudienceLayout'
+import UserLayout from '../components/layouts/user/UserLayout'
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
@@ -18,32 +18,32 @@ const mainRoutes = [//默认路由（其实是第二层，第一层在隔壁inde
     {
         path: "/user",
         icon: 'user',
-        component: AudienceLayout,
+        component: UserLayout,
         children:[
             {
                 path: "/home",
                 icon: 'home',
-                component: wrap(Pages.Audience.Home),
+                component: wrap(Pages.User.Home),
             },
             {
                 path: "/my",
                 icon: 'my',
-                component: wrap(Pages.Audience.My),
+                component: wrap(Pages.User.My),
             },
             {
                 path: "/list",
                 icon: 'list',
-                component: wrap(Pages.Audience.List),
+                component: wrap(Pages.User.List),
             },
             {
                 path: "/search",
                 icon: 'search',
-                component: wrap(Pages.Audience.Search)
+                component: wrap(Pages.User.Search)
             },
             {
                 path: "/detail",
                 icon: 'detail',
-                component: wrap(Pages.Audience.Detail)
+                component: wrap(Pages.User.Detail)
             },
         ]
     }

@@ -1,2 +1,2 @@
-import * as Audience from './audience';
-export {Audience}
+import * as User from './user';
+export {User}

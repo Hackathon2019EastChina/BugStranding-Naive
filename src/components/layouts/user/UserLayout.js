@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
     signInVisible:state.modalReducer.signInVisible,
     signUpVisible:state.modalReducer.signUpVisible,
 })
-class AudienceLayout extends BaseComponent {
+class UserLayout extends BaseComponent {
     
     constructor(props){
         super(props);
@@ -88,4 +88,4 @@ class AudienceLayout extends BaseComponent {
 
 
 
-export default connect(mapStateToProps)(withRouter(AudienceLayout))
+export default connect(mapStateToProps)(withRouter(UserLayout))
